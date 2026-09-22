@@ -1,0 +1,30 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pytest_cache/
+.pytest_cache/
+
+# Databases
+personal_os.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo

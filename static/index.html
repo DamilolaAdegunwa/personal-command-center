@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PERSONAL COMMAND CENTER // AETHER OS</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛰️</text></svg>">
+</head>
+<body>
+  <div class="app-container">
+    <!-- TOP COMMAND HEADER -->
+    <header class="top-header">
+      <div class="brand-section">
+        <div class="brand-logo">⌘</div>
+        <div>
+          <span class="brand-title">Personal Command Center</span>
+          <span class="brand-badge">PERSONAL OS v1.0</span>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <div class="search-trigger" onclick="openSearchModal()">
+          <span>🔍</span>
+          <span>Search everything...</span>
+          <span class="kbd-shortcut">⌘K</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="live-clock">
+          <div class="clock-dot"></div>
+          <span id="live-clock-time">--:--:--</span>
+        </div>
+
+        <button class="btn btn-ai" onclick="triggerDailyBriefing()">
+          <span>🛰️</span> Briefing <span class="kbd-shortcut" style="color:var(--violet);">B</span>
+        </button>
+
+        <button class="btn btn-primary" onclick="openQuickCapture('task')">
+          <span>+</span> Quick Capture <span class="kbd-shortcut" style="color:#000; background:rgba(0,0,0,0.15); border-color:transparent;">C</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN BODY -->
+    <div class="workspace-body">
+      <!-- SIDEBAR HUD NAVIGATION -->
+      <aside class="sidebar">
+        <div>
+          <div class="nav-group">
+            <div class="nav-label">Tactical Operations</div>
+            <div class="nav-item active" data-view="today" onclick="switchView('today')">
+              <div class="nav-item-left">
+                <span>🎯</span>
+                <span>Today Cockpit</span>
+              </div>
+              <span id="badge-p0-count" class="nav-counter">0</span>
+            </div>
+            <div class="nav-item" data-view="projects" onclick="switchView('projects')">
+              <div class="nav-item-left">
+                <span>📁</span>
+                <span>Projects</span>
+              </div>
+              <span id="badge-projects-count" class="nav-counter">0</span>
+            </div>
+            <div class="nav-item" data-view="ideas" onclick="switchView('ideas')">
+              <div class="nav-item-left">
+                <span>💡</span>
+                <span>Ideas Pipeline</span>
+              </div>
+              <span id="badge-ideas-count" class="nav-counter">0</span>
+            </div>
+            <div class="nav-item" data-view="experiments" onclick="switchView('experiments')">
+              <div class="nav-item-left">
+                <span>🧪</span>
+                <span>Experiments</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-group" style="margin-top: 14px;">
+            <div class="nav-label">Strategic Intelligence</div>
+            <div class="nav-item" data-view="decisions" onclick="switchView('decisions')">
+              <div class="nav-item-left">
+                <span>⚖️</span>
+                <span>Decision Log</span>
+              </div>
+            </div>
+            <div class="nav-item" data-view="research" onclick="switchView('research')">
+              <div class="nav-item-left">
+                <span>🔬</span>
+                <span>Deep Research</span>
+              </div>
+            </div>
+            <div class="nav-item" data-view="learning" onclick="switchView('learning')">
+              <div class="nav-item-left">
+                <span>📚</span>
+                <span>Learning & Skills</span>
+              </div>
+            </div>
+            <div class="nav-item" data-view="opportunities" onclick="switchView('opportunities')">
+              <div class="nav-item-left">
+                <span>🔭</span>
+                <span>Opportunity Radar</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-group" style="margin-top: 14px;">
+            <div class="nav-label">Synthesis & Control</div>
+            <div class="nav-item" data-view="graph" onclick="switchView('graph')">
+              <div class="nav-item-left">
+                <span>🕸️</span>
+                <span>Knowledge Graph</span>
+              </div>
+            </div>
+            <div class="nav-item" data-view="metrics" onclick="switchView('metrics')">
+              <div class="nav-item-left">
+                <span>📊</span>
+                <span>Situational Metrics</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="sys-stat">
+            <span>STORAGE</span>
+            <span style="color:var(--emerald);">SQLITE WAL</span>
+          </div>
+          <div class="sys-stat">
+            <span>LATENCY</span>
+            <span style="color:var(--cyan);">&lt; 1.2ms</span>
+          </div>
+          <div class="sys-stat">
+            <span>GROUNDING</span>
+            <span style="color:var(--violet);">STRICT [FACT]</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- VIEWPORT PANELS -->
+      <main class="content-viewport">
+        <!-- 1. TODAY COCKPIT -->
+        <div id="view-today" class="view-container active">
+          <div class="view-header">
+            <div class="view-title-block">
+              <h1><span>🛰️</span> Tactical Morning Cockpit</h1>
+              <p>Situational awareness across active priorities, approaching deadlines, and blocked dependencies.</p>
+            </div>
+            <div class="view-actions">
+              <button class="btn btn-ai btn-sm" onclick="triggerDailyBriefing()">Generate Briefing</button>
+            </div>
+          </div>
+          <div id="today-content"></div>
+        </div>
+
+        <!-- 2. PROJECTS -->
+        <div id="view-projects" class="view-container">
+          <div class="view-header">
+            <div class="view-title-block">
+              <h1><span>📁</span> Strategic Project Portfolio</h1>
+              <p>Active, planned, completed, and blocked initiatives with health audits and next actions.</p>
+            </div>
+          </div>
+          <div id="projects-content"></div>
+        </div>
+
+        <!-- 3. IDEAS PIPELINE -->
+        <div id="view-ideas" class="view-container">
+          <div class="view-header">
+            <div class="view-title-block">
+              <h1><span>💡</span> Idea Lifecycle State Machine</h1>
+              <p>Stages: Captured ➔ Explored ➔ Validated ➔ Planned ➔ Executing ➔ Completed / Abandoned.</p>
+            </div>
+          </div>
+          <div id="ideas-content"></div>
+        </div>
+
+        <!-- 4. EXPERIMENTS -->
+        <div id="view-experiments" class="view-container">
+          <div class="view-header">
+            <div class="view-title-block">
+              <h1><span>🧪</span> Empirical Hypothesis & Experiments</h1>
+              <p>Rigorous verification workflow: Idea ➔ Hypothesis ➔ Experiment ➔ Evidence ➔ Decision.</p>
+            </div>
+          </div>
+          <div id="experiments-content"></div>
+        </div>
+
+        <!-- 5. DECISIONS -->
+        <div id="view-decisions" class="view-container">
+          <div class="view-header">
+            <div class="view-title-block">
+              <h1><span>⚖️</span> Decision Intelligence Database</h1>
+              <p>Retrospective journal: Context, alternatives, assumptions, confidence scoring, and outcomes.</p>
+            </div>
+          </div>
+          <div id="decisions-content"></div>
+        </div>
+
+        <!-- 6. RESEARCH -->
+        <div id="view-research" class="view-container">
+          <div class="view-header">
+            <div class="view-title-block">
+              <h1><span>🔬</span> Deep Research Dossiers</h1>
+              <p>Research questions, empirical investigations, verified findings, citations, and open queries.</p>
+            </div>
+          </div>
+          <div id="research-content"></div>
+        </div>
+
+        <!-- 7. LEARNING -->
+        <div id="view-learning" class="view-container">
+          <div class="view-header">
+            <div class="view-title-block">
+              <h1><span>📚</span> Skills Curriculum & Mastery Tracks</h1>
+              <p>Books, papers, courses, and completed practical programming exercises.</p>
+            </div>
+          </div>
+          <div id="learning-content"></div>
+        </div>
+
+        <!-- 8. OPPORTUNITIES -->
+        <div id="view-opportunities" class="view-container">
+          <div class="view-header">
+            <div class="view-title-block">
+              <h1><span>🔭</span> Asymmetric Opportunity Radar</h1>
+              <p>Career, technology, venture, and investment opportunities scored by upside, requirements, and risks.</p>
+            </div>
+          </div>
+          <div id="opportunities-content"></div>
+        </div>
+
+        <!-- 9. KNOWLEDGE GRAPH -->
+        <div id="view-graph" class="view-container">
+          <div class="view-header">
+            <div class="view-title-block">
+              <h1><span>🕸️</span> Personal Knowledge Graph</h1>
+              <p>Interactive relational network: Idea ➔ Research ➔ Finding ➔ Decision ➔ Project ➔ Opportunity.</p>
+            </div>
+          </div>
+          <div class="graph-container">
+            <div class="graph-controls">
+              <span style="font-size:11px; font-weight:700; color:var(--text-dim); text-transform:uppercase;">Filter:</span>
+              <button class="btn btn-ghost btn-sm" onclick="filterGraphNodes('all')">All</button>
+              <button class="btn btn-ghost btn-sm" onclick="filterGraphNodes('project')">Projects</button>
+              <button class="btn btn-ghost btn-sm" onclick="filterGraphNodes('idea')">Ideas</button>
+              <button class="btn btn-ghost btn-sm" onclick="filterGraphNodes('decision')">Decisions</button>
+              <button class="btn btn-ghost btn-sm" onclick="filterGraphNodes('research')">Research</button>
+              <button class="btn btn-ghost btn-sm" onclick="if(kgInstance) kgInstance.resetView()">Reset Zoom</button>
+            </div>
+            <div id="kg-canvas-container" style="width:100%; height:100%;"></div>
+            <div id="graph-node-inspector" class="graph-inspector"></div>
+          </div>
+        </div>
+
+        <!-- 10. SITUATIONAL METRICS -->
+        <div id="view-metrics" class="view-container">
+          <div class="view-header">
+            <div class="view-title-block">
+              <h1><span>📊</span> Situational Awareness Metrics</h1>
+              <p>Real velocity, project health distributions, idea conversion funnels, and stagnation alerts.</p>
+            </div>
+          </div>
+          <div id="metrics-content"></div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- UNIVERSAL OMNI-SEARCH MODAL (Cmd+K) -->
+  <div id="search-modal" class="modal-overlay">
+    <div class="modal-box" style="width:680px;">
+      <div style="padding:14px; border-bottom:1px solid var(--border-subtle); display:flex; align-items:center; gap:10px;">
+        <span style="font-size:16px;">🔍</span>
+        <input type="text" id="omni-search-input" class="form-input" style="border:none; background:transparent; font-size:15px; padding:4px;" placeholder="Search projects, ideas, decisions, tasks, research, opportunities..." oninput="handleOmniSearchInput(this.value)" />
+        <span class="kbd-shortcut">ESC</span>
+      </div>
+      <div id="omni-search-results" class="modal-body" style="max-height:480px; min-height:160px;">
+        <div style="color:var(--text-dim); padding:20px; text-align:center;">Type keywords to search...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK CAPTURE MODAL (C) -->
+  <div id="quick-capture-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3><span>⚡</span> Quick Capture</h3>
+        <button class="modal-close" onclick="closeQuickCapture()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Entity Type</label>
+          <select id="qc-type-select" class="form-select" onchange="renderQuickCaptureFields(this.value)">
+            <option value="task">Tactical Task</option>
+            <option value="project">Project Initiative</option>
+            <option value="idea">Raw Idea / Spark</option>
+            <option value="experiment">Scientific Experiment</option>
+            <option value="decision">Decision Statement</option>
+            <option value="opportunity">Opportunity</option>
+          </select>
+        </div>
+        <div id="qc-dynamic-fields"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeQuickCapture()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitQuickCapture()">Save to System</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROUNDED AI STUDIO MODAL (B) -->
+  <div id="ai-modal" class="modal-overlay">
+    <div class="modal-box" style="width:780px;">
+      <div class="modal-header">
+        <h3 id="ai-modal-title"><span>🛰️</span> Grounded AI Studio</h3>
+        <button class="modal-close" onclick="closeAIModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="ai-modal-content" class="ai-output-box"></div>
+      </div>
+      <div class="modal-footer">
+        <div style="margin-right:auto; font-size:11px; color:var(--text-dim);">
+          Strictly grounded in local SQLite records. Tags: <span class="tag-fact">[FACT]</span> <span class="tag-user-context">[CONTEXT]</span> <span class="tag-assumption">[ASSUMPTION]</span> <span class="tag-ai-rec">[RECOMMENDATION]</span>
+        </div>
+        <button class="btn btn-ghost" onclick="closeAIModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- SCRIPTS -->
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/graph.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
